@@ -1,7 +1,6 @@
 package lexer
 
 import (
-	"fmt"
 	"slices"
 	"unicode"
 )
@@ -41,6 +40,10 @@ type Tokenizer struct {
 
 var Keywords = []string{
 	"function",
+	"class",
+	"private",
+	"public",
+	"readonly",
 	"var",
 	"let",
 	"const",
@@ -72,7 +75,7 @@ func (tokenizer *Tokenizer) NextToken() Token {
 	tokenizer.skipWhitespaces()
 
 	symbols := []rune{
-		'+', '=', '>', '<', '-', '%', '&', '|', '^', '*',
+		'+', '=', '>', '<', '-', '%', '&', '|', '^', '*', ':',
 	}
 
 	token := Token{
@@ -133,7 +136,6 @@ func (tokenizer *Tokenizer) NextToken() Token {
 
 		return token
 	}
-	fmt.Printf("ch is %v and token is %v : %v \n", string(tokenizer.ch), token.kind, token.literal)
 
 	tokenizer.readChar()
 

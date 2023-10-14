@@ -45,6 +45,14 @@ func TestTokenizer(t *testing.T) {
   for(let i = 10; i < arr.length; i++) {
     console.log(arr[i])
   }
+
+  var x2 = ten * 2
+
+  class Person{
+    constructor(private name: string) {}
+  }
+
+
   `
 
 	lexer := NewTokenizer(input)
@@ -65,12 +73,12 @@ func TestTokenizer(t *testing.T) {
 		{Keyword, "function"},
 		{Ident, "add"},
 		{LParen, "("},
-		{Ident, "a"},
+		{Ident, "x"},
 		{Comma, ","},
-		{Ident, "b"},
+		{Ident, "y"},
 		{RParen, ")"},
 		{LCurly, "{"},
-		{Comment, " this is a comment"},
+		{Comment, "// this is a comment"},
 		{Keyword, "return"},
 		{Ident, "x"},
 		{Symbol, "+"},
@@ -87,10 +95,6 @@ func TestTokenizer(t *testing.T) {
 		{Comma, ","},
 		{Num, "1"},
 		{RParen, ")"},
-		//
-		// for(let i = 10; i < arr.length; i++) {
-		//   console.log(arr[i])
-		// }
 
 		{Keyword, "for"},
 		{LParen, "("},
@@ -100,7 +104,7 @@ func TestTokenizer(t *testing.T) {
 		{Num, "10"},
 		{Semi, ";"},
 		{Ident, "i"},
-		{Symbol, ">"},
+		{Symbol, "<"},
 		{Ident, "arr.length"},
 		{Semi, ";"},
 		{Ident, "i"},
@@ -113,12 +117,36 @@ func TestTokenizer(t *testing.T) {
 		{Ident, "arr[i]"},
 		{RParen, ")"},
 		{RCurly, "}"},
+
+		{Keyword, "var"},
+		{Ident, "x2"},
+		{Symbol, "="},
+		{Ident, "ten"},
+		{Symbol, "*"},
+		{Num, "2"},
+		// class Person{
+		//   constructor(private name: string) {}
+		// }
+
+		{Keyword, "class"},
+		{Ident, "Person"},
+		{LCurly, "{"},
+		{Ident, "constructor"},
+		{LParen, "("},
+		{Keyword, "private"},
+		{Ident, "name"},
+		{Symbol, ":"},
+		{Ident, "string"},
+		{RParen, ")"},
+		{LCurly, "{"},
+		{RCurly, "}"},
+		{RCurly, "}"},
 	}
 
 	for _, token := range tokens {
 		next := lexer.NextToken()
 
-		if next.kind != token.kind && next.literal != token.literal {
+		if next.kind != token.kind || next.literal != token.literal {
 			t.Errorf("Token %v:%v expected %v:%v", next.kind, next.literal, token.kind, token.literal)
 		}
 	}
